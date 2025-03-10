@@ -1,0 +1,27 @@
+[Unit]
+ Description=Keycloak Authorization Server
+ After=network.target
+
+[Service]
+ User=keycloak
+ Group=keycloak
+ ExecStart=/opt/keycloak/bin/kc.sh start --cache-config-file=custom-ispn.xml -Dkeycloak.profile.feature.token_exchange=enabled --features=token-exchange -Dkeycloak.profile.feature.admin_fine_grained_authz=enabled --log="console,file"  --log-level=Info --log-file=/opt/keycloak/data/keycloak.log
+ ExecStop=/opt/keycloak/bin/kc.sh stop
+ Restart=always
+ RestartSec=3
+ Environment="KC_HOSTNAME=https://<LB_DOMAIN_NAME>"
+ Environment="KC_HOSTNAME_STRICT=false"
+ Environment="KEYCLOAK_ADMIN=admin"
+ Environment="KEYCLOAK_ADMIN_PASSWORD=<ADMINPASS>"
+ Environment="KC_DB=postgres"
+ Environment="KC_DB_URL=jdbc:postgresql://DB_HOSTNAME:5432/DBNAME"
+ Environment="KC_DB_USERNAME=<DB USER>"
+ Environment="KC_DB_PASSWORD=<DB PASSWORD>"
+ Environment="KC_HTTPS_ENFORCED=false"
+ Environment="KC_HTTP_ENABLED=true"
+ Environment="QUARKUS_LOG_FILE_ENABLE=true"
+ Environment="QUARKUS_LOG_FILE_PATH=/opt/keycloak/data/keycloak.log"
+ Environment="QUARKUS_LOG_FILE_ROTATION_MAX_FILE_SIZE=0"
+ Environment="QUARKUS_LOG_FILE_ROTATION_MAX_BACKUP_INDEX=0"
+ [Install]
+ WantedBy=multi-user.target
