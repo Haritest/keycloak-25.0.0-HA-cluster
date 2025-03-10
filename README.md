@@ -1,26 +1,32 @@
 Keycloak
 ========
 
-To get help configuring Keycloak via the CLI, run:
+To Configure a Keycloak cluster with high availability and run in any environment. 
+The scenario is to access the keycloak nodes through a load balancer and the caching should happen at
+Postgres database level.
 
-on Linux/Unix:
+Pre-requesties 
+===============
 
-    $ bin/kc.sh
+Keycloak version : 25.0.0
+Postgresql
+Elastic Load balancer or any
+All the configuration is passed as environment variable in the keycloak systemd service
 
-on Windows:
+Configuration
+=============
 
-    $ bin\kc.bat
+We have to update the following files with key configurations on all the servers
+1. keycloak.service
+2. custom-ispn.xml
 
-To try Keycloak out in development mode, run: 
+Update the keycloak.service file with the respective values like DB name, host, port, loadbalancer name, etc..
+and copy it under /etc/systemd/system/. If you are using different version of linux / windows. update as per the OS version
 
-on Linux/Unix:
+    $systemctl daemon-reload
 
-    $ bin/kc.sh start-dev
+Update custom-ispn.xml file with the respective values.
 
-on Windows:
+Restart keycloak on all servers
 
-    $ bin\kc.bat start-dev
-
-After the server boots, open http://localhost:8080 in your web browser. The welcome page will indicate that the server is running.
-
-To get started, check out the [configuration guides](https://www.keycloak.org/guides#server).
+    $ systemctl start keycloak
