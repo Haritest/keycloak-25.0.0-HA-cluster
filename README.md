@@ -13,6 +13,20 @@ Postgresql
 Elastic Load balancer or any
 All the configuration is passed as environment variable in the keycloak systemd service
 
+Required ports:
+8080 (HTTP) for Keycloak. 
+7600  for JGroups (used for clustering). 
+
+Install Java 17:
+apt install openjdk-17-jre-headless //for example 
+
+Download Keycloak on each VM: 
+wget https://github.com/keycloak/keycloak/releases/download/25.0.0/keycloak-25.0.0.tar.gz 
+tar -xvf keycloak-25.0.0.tar.gz 
+sudo useradd -r -d /opt/prod-keycloak/keycloak -s /sbin/nologin keycloak 
+mv keycloak-25.0.0 keycloak 
+sudo chown -R keycloak:keycloak /opt/keycloak 
+
 Configuration
 =============
 
@@ -30,3 +44,5 @@ Update custom-ispn.xml file with the respective values.
 Restart keycloak on all servers
 
     $ systemctl start keycloak
+====================================================================
+
